@@ -53,6 +53,7 @@
 
 
 /* make header look pretty */
+
 nav {
     height: 4em;
 }
@@ -64,8 +65,45 @@ nav h1 a {
 
 
 
-@media only screen and (max-width: 774px) {
-    /* restraunts go in to one column */
+@media only screen and (max-width: 820px) {
+    /* make breadcrumb pretty on small screens */
+    #breadcrumb {
+        width: 100%;
+    }
+
+    /* arrange map on top of restaurant details */
+    .inside #map-container,
+    #restaurant-container,
+    #reviews-container,
+    .inside #footer {
+        width: 100%;
+        position: relative;
+        top: 91px;
+    }
+
+    /* do some minor prettifications */
+    .inside #map-container {
+        height: 400px;
+        border-bottom: 1px solid black;
+    }
+    
+    #restaurant-container {
+        padding: 10px 30px;
+    }
+    
+    #reviews-container {
+        padding: 10px 30px;
+    }
+    
+    #reviews-list {
+        padding: 0;
+    }
+    
+    #restaurant-img,
+    #restaurant-cuisine {
+        width: 100%;
+    }
+
 }
 
 @media (max-width: 600px) {
@@ -79,8 +117,6 @@ nav h1 a {
         line-height: 2em;
         font-size: 1em;
     }
-
-
     /* filter results wraps to two lines */
     .filter-options h2 {
         line-height: 1;

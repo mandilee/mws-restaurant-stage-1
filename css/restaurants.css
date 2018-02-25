@@ -35,6 +35,7 @@
 }
 
 .restaurant-img {
+    border-radius: 20px 0;
     
 }
 
@@ -45,3 +46,7 @@
 .restaurant-hours {
     
 }
+    
+    #reviews-list {
+        padding: 0;
+    }
