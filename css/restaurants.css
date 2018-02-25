@@ -1,9 +1,10 @@
 /* ########## List of restaurants ########## */
-.list-restaurant-container{
-    
+.list-restaurant-container {
+    display: grid;  
 }
 
 .list-restaurant-img {
+    margin-top: 10px;
     
 }
 

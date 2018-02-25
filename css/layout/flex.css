@@ -1,0 +1,104 @@
+/* set up the flexy responsiveness for index.html */
+
+.row {
+    display: flex;
+    flex-flow: row wrap;
+    padding: 0 4px;
+    justify-content: center;
+}
+
+/* Create five equal columns that sits next to each other */
+
+.column {
+    flex: calc(20% - 20px);
+    max-width: calc(20% - 20px);
+    margin: 10px;
+}
+
+/* Responsive layout - makes a four column-layout instead of five columns */
+
+@media (max-width: 1280px) {
+    .column {
+        flex: calc(25% - 20px);
+        max-width: calc(25% - 20px);
+    }
+}
+
+/* Responsive layout - makes a three column-layout instead of five columns */
+
+@media (max-width: 1060px) {
+    .column {
+        flex: calc(33% - 20px);
+        max-width: calc(33% - 20px);
+    }
+}
+
+/* Responsive layout - makes a two column-layout instead of five columns */
+
+@media (max-width: 800px) {
+    .column {
+        flex: calc(50% - 20px);
+        max-width: calc(50% - 20px);
+    }
+}
+
+/* Responsive layout - makes a one column-layout instead of five columns */
+
+@media (max-width: 600px) {
+    .column {
+        flex: 100%;
+        max-width: 100%;
+    }
+}
+
+
+/* make header look pretty */
+nav {
+    height: 4em;
+}
+
+nav h1 a {
+    line-height: 2em;
+    font-size: 1.5em;
+}
+
+
+
+@media only screen and (max-width: 774px) {
+    /* restraunts go in to one column */
+}
+
+@media (max-width: 600px) {
+    /* make header pretty on small screens */
+    nav {
+        height: 3em;
+    }
+
+    nav h1 a {
+        letter-spacing: normal;
+        line-height: 2em;
+        font-size: 1em;
+    }
+
+
+    /* filter results wraps to two lines */
+    .filter-options h2 {
+        line-height: 1;
+        padding: 10px 0 5px;
+    }
+
+    .filter-options {
+        height: 150px;
+    }
+
+    .filter-options h2 {
+        padding: 10px 0 5px;
+    }
+
+    .filter-options select {
+        min-height: 48px;
+        width: calc(100% - 20px);
+        margin: 5px 10px;
+    }
+
+}
