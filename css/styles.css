@@ -75,6 +75,7 @@ section {
 #maincontent {
     background-color: #f3f3f3;
     min-height: 100%;
+    padding-bottom: 4em;
 }
 
 #footer {
@@ -302,11 +303,17 @@ nav h1 a {
     width: 90%;
 }
 
-#restaurant-container,
+#restaurant-container {
+    border-bottom: 1px solid #d9d9d9;
+    border-top: 1px solid #fff;
+    padding: 100px 40px 30px;
+    width: 50%;
+}
+
 #reviews-container {
     border-bottom: 1px solid #d9d9d9;
     border-top: 1px solid #fff;
-    padding: 140px 40px 30px;
+    padding: 3px 40px 30px;
     width: 50%;
 }
 
@@ -318,31 +325,19 @@ nav h1 a {
     padding-bottom: 1pt;
 }
 
-/*#reviews-container {
-    padding: 30px 40px 80px;
-}
-
-#reviews-list {
-    margin: 0;
-    padding: 0;
-}
-
-#reviews-list li {
-    background-color: #fff;
-    border: 2px solid #f3f3f3;
-    display: block;
-    list-style-type: none;
-    margin: 0 0 30px;
-    overflow: hidden;
-    padding: 0 20px 20px;
-    position: relative;
-    width: 85%;
-}
-
-#reviews-list li p {
-    margin: 0 0 10px;
-}*/
-
 #restaurant-hours td {
     color: #666;
+}
+
+
+.filter-options select:focus,
+.filter-options select:hover
+{
+    border: 1px solid blue;
+    background-color: lightblue;
+}
+#restaurants-list li a:focus,
+#restaurants-list li a:hover
+{
+    background-color: orangered;
 }
