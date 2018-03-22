@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,6 +14,7 @@
 </head>
 
 <body class="inside">
+    <p class="screen-reader-only"><a href="#maincontent">Skip to content</a></p>
     <!-- Beginning header -->
     <header>
         <!-- Beginning nav -->
@@ -41,12 +42,12 @@
             <h1 id="restaurant-name"></h1>
             <img id="restaurant-img">
             <p id="restaurant-cuisine"></p>
-            <p id="restaurant-address"></p>
-            <table id="restaurant-hours"></table>
+            <address id="restaurant-address"></address>
+            <table id="restaurant-hours" aria-label="Opening Times"> </table>
         </section>
         <!-- end restaurant -->
         <!-- Beginning reviews -->
-        <section id="reviews-container">
+        <section id="reviews-container" aria-label="Restaurant reviews">
             <ul id="reviews-list"></ul>
         </section>
         <!-- End reviews -->

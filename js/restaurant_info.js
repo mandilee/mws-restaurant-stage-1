@@ -55,6 +55,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
     const address = document.getElementById('restaurant-address');
     address.className = 'restaurant-address';
+    address.setAttribute('aria-label', 'Address for ' + restaurant.name);
     address.innerHTML = restaurant.address;
 
     const image = document.getElementById('restaurant-img');
@@ -64,6 +65,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
     const cuisine = document.getElementById('restaurant-cuisine');
     cuisine.className = 'restaurant-cuisine';
+    address.setAttribute('aria-label', 'Cuisine Type');
     cuisine.innerHTML = restaurant.cuisine_type;
 
     // fill operating hours
@@ -129,21 +131,25 @@ createReviewHTML = (review) => {
     li.appendChild(head);
 
     const name = document.createElement('div');
+    name.setAttribute('aria-label', 'Reviewer name');
     name.className = "review-name";
     name.innerHTML = review.name;
     head.appendChild(name);
 
     const date = document.createElement('div');
+    date.setAttribute('aria-label', 'Review date');
     date.className = "review-date";
     date.innerHTML = review.date;
     head.appendChild(date);
 
     const rating = document.createElement('p');
+    rating.setAttribute('aria-label', 'Review rating');
     rating.className = "review-rating";
     rating.innerHTML = `Rating: ${review.rating}`;
     li.appendChild(rating);
 
     const comments = document.createElement('p');
+    comments.setAttribute('aria-label', 'Review comments');
     comments.className = "review-comments";
     comments.innerHTML = review.comments;
     li.appendChild(comments);
