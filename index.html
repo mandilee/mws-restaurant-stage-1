@@ -4,10 +4,9 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css" />
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/restaurants.css">
-    <link rel="stylesheet" href="css/layout/flex.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/styles.css" type="text/css" />
+    <link rel="stylesheet" href="css/layout/flex.css" type="text/css" />
     <!--
         <link rel="stylesheet" href="css/layout/max-480px.css" media="screen and (max-width:480px)">
 -->
@@ -15,7 +14,7 @@
 </head>
 
 <body>
-            <p class="screen-reader-only"><a href="#maincontent">Skip to content</a></p>
+    <p class="screen-reader-only"><a href="#maincontent">Skip to content</a></p>
 
     <header>
         <nav>
@@ -33,13 +32,13 @@
                 <label for="neighborhoods-select" class="screen-reader-only">
                     Filter by neighbourhood
                 </label>
-                    <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
+                <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
                         <option value="all">All Neighbourhoods</option>
                     </select>
                 <label for="cuisines-select" class="screen-reader-only">
                     Filter by cuisine
                 </label>
-                    <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" title="Filter by cuisine">
+                <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" title="Filter by cuisine">
                         <option value="all">All Cuisines</option>
                     </select>
             </div>
@@ -56,6 +55,7 @@
     </footer>
 
     <script>
+        // https://developers.google.com/web/fundamentals/primers/service-workers/
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('sw.js').then(function(registration) {

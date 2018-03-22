@@ -6,10 +6,9 @@
     <!-- Normalize.css for better cross-browser consistency -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css" />
     <!-- Main CSS file -->
-    <link rel="stylesheet" href="css/styles.css" type="text/css">
-    <link rel="stylesheet" href="css/restaurants.css">
-    <link rel="stylesheet" href="css/reviews.css">
-    <link rel="stylesheet" href="css/layout/flex.css">
+    <link rel="stylesheet" href="css/styles.css" type="text/css" />
+    <link rel="stylesheet" href="css/reviews.css" type="text/css" />
+    <link rel="stylesheet" href="css/layout/flex.css" type="text/css" />
     <title>Restaurant Info</title>
 </head>
 
@@ -69,6 +68,7 @@
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2AJZ_ogChsP0htyJf6OCZFQFY7fCTdn4&libraries=places&callback=initMap"></script>
 
     <script>
+        // https://developers.google.com/web/fundamentals/primers/service-workers/
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('sw.js').then(function(registration) {

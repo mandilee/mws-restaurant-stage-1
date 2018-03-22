@@ -331,21 +331,39 @@ nav h1 a {
 
 
 .filter-options select:focus,
-.filter-options select:hover
-{
+.filter-options select:hover {
     border: 1px solid blue;
     background-color: lightblue;
 }
+
 #restaurants-list li a:focus,
-#restaurants-list li a:hover
-{
+#restaurants-list li a:hover {
     background-color: orangered;
 }
+
+.list-restaurant-container {
+    display: grid;
+}
+
+.list-restaurant-img {
+    margin-top: 10px;
+
+}
+
+.restaurant-img {
+    border-radius: 20px 0;
+}
+
+#reviews-list {
+    padding: 0;
+}
+
 
 
 .screen-reader-only {
     position: absolute !important;
-    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px 1px 1px 1px);
+    /* IE6, IE7 */
     clip: rect(1px, 1px, 1px, 1px);
 
 }
