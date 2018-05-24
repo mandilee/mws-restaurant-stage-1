@@ -65,23 +65,8 @@
     <!-- Main javascript file -->
     <script type="text/javascript" src="js/restaurant_info.js"></script>
     <!-- Google Maps -->
+    <script src="js/index.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2AJZ_ogChsP0htyJf6OCZFQFY7fCTdn4&libraries=places&callback=initMap"></script>
-
-    <script>
-        // https://developers.google.com/web/fundamentals/primers/service-workers/
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('sw.js').then(function(registration) {
-                    // registration success
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }, function(err) {
-                    // registration failure
-                    console.log('ServiceWorker registration failed: ', err);
-                });
-            });
-        }
-
-    </script>
 
 </body>
 
