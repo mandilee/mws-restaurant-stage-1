@@ -91,7 +91,7 @@ gulp.task('cleanup', function () {
 gulp.task('serve', ['styles', 'scripts', 'images'], function() {
   gulp.src('./')
     .pipe(webserver({
-      port: 8000,
+      port: 8010,
     }));
 
 });
