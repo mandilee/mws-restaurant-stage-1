@@ -1,0 +1,55 @@
+$color_1: #fff;
+$color_2: #ccc;
+$background_color_1: darkred;
+$background_color_2: #fff;
+
+/* ====================== Single Review ====================== */
+.review-container {
+	border-radius: 20px 0 0 20px;
+	margin: 0 0 20px;
+}
+.review-header {
+	background: #000;
+	padding: 10px;
+	color: $color_1;
+	height: 4em;
+}
+.review-name {
+	margin: 0 20px;
+	font-size: 1.5em;
+	line-height: 1.75em;
+	float: left;
+}
+.review-date {
+	margin: 0 10px;
+	float: right;
+	font-size: 1em;
+	line-height: 2.5em;
+	color: $color_2;
+}
+.review-rating {
+	background-color: $background_color_1;
+	border-radius: 5px;
+	height: 2em;
+	line-height: 2em;
+	color: $color_1;
+	width: 7em;
+	padding: 0 13px;
+	font-size: 1em;
+	font-weight: bold;
+	margin: 20px;
+	text-transform: uppercase;
+}
+.review-comments {
+	margin: 20px;
+}
+#reviews-list {
+	li {
+		background-color: $background_color_2;
+		border: 2px solid #f3f3f3;
+		display: block;
+		list-style-type: none;
+		overflow: hidden;
+		position: relative;
+	}
+}

@@ -1,0 +1,21 @@
+{
+    "name": "ml-restaurant-reviews",
+    "version": "1.0.0.",
+    "description": "Restaurant Reviews - Udacity Course",
+    "main": "",
+    "scripts": {
+        "build": "babel js/ES6 -d js"
+    },
+    "dependencies": {
+        "del": "^3.0.0",
+        "gulp": "^3.9.1",
+        "gulp-clean-css": "^3.9.4",
+        "gulp-concat": "^2.6.1",
+        "gulp-sass": "^4.0.1",
+        "indexeddb-promised": "^1.3.1"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.16.0",
+        "babel-preset-es2015": "^6.16.0"
+    }
+}
