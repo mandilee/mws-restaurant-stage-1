@@ -10,7 +10,6 @@ self.addEventListener('install', function (event) {
                 '/css/layout/flex.css',
                 '/index.html',
                 '/restaurant.html',
-                '/data/restaurants.json',
                 '/js/restaurant_info.js',
                 '/js/dbhelper.js',
                 '/js/main.js',
