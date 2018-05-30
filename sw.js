@@ -5,14 +5,11 @@ self.addEventListener('install', function (event) {
         caches.open(staticCacheName).then(function (cache) {
             return cache.addAll([
                 '/',
-                '/css/reviews.css',
-                '/css/styles.css',
-                '/css/layout/flex.css',
+                '/css/all.css',
                 '/index.html',
                 '/restaurant.html',
-                '/js/restaurant_info.js',
-                '/js/dbhelper.js',
-                '/js/main.js',
+                '/js/all_index.js',
+                '/js/all_restaurant.js',
                 'https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css'
             ]);
         })
