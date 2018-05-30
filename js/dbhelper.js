@@ -20,7 +20,7 @@ class DBHelper {
         fetch(DBHelper.DATABASE_URL)
             .then(response => response.json())
             .then(restaurants => callback(null, restaurants))
-            .catch(error, callback(`Request failed: ${response}`, null));
+            .catch(error => callback(`Request failed: ${response}`, null));
     }
 
     /**
@@ -31,7 +31,7 @@ class DBHelper {
         fetch(`${DBHelper.DATABASE_URL}/${id}`)
             .then(response => response.json())
             .then(restaurant => callback(null, restaurant))
-            .catch(error, callback(`Restaurant does not exist`, null));
+            .catch(error => callback(`Restaurant does not exist`, null));
     }
 
     /**
