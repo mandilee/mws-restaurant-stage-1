@@ -140,7 +140,7 @@ createRestaurantHTML = (restaurant) => {
     li.className = 'list-restaurant-container column';
 
     const image = document.createElement('img');
-    image.alt = restaurant.photo_description;
+    image.alt = `${restaurant.name} - ${restaurant.neighborhood}`;
     image.className = 'list-restaurant-img';
     image.src = DBHelper.imageUrlForRestaurant(restaurant);
     li.append(image);
