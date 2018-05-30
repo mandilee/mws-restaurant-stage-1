@@ -1,9 +1,9 @@
-const SOURCE_JS = 'scripts',
-    SOURCE_SCSS = 'sass',
-    SOURCE_IMG = 'img',
+const SOURCE_JS = 'dev/js',
+    SOURCE_SCSS = 'dev/sass',
+    SOURCE_IMG = 'dev/img',
     DEST_JS = 'js',
     DEST_CSS = 'css',
-    DEST_IMG = 'img/web';
+    DEST_IMG = 'img';
 
 
 
@@ -14,7 +14,8 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     imagemin = require('gulp-imagemin'),
     jimp = require('gulp-jimp-resize'),
-    webp = require('gulp-webp');
+    webp = require('gulp-webp'),
+    webserver = require('gulp-webserver');
 
 
 gulp.task('default', function () {
@@ -83,5 +84,14 @@ gulp.task('cleanup', function () {
     del([`${DEST_CSS}/**`]);
     del([`${DEST_JS}/**`]);
     del([`${DEST_IMG}/**`]);
+
+});
+
+
+gulp.task('serve', ['styles', 'scripts', 'images'], function() {
+  gulp.src('./')
+    .pipe(webserver({
+      port: 8000,
+    }));
 
 });

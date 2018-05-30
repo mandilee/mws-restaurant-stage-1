@@ -133,8 +133,9 @@ class DBHelper {
     /**
      * Restaurant image URL.
      */
-    static imageUrlForRestaurant(restaurant) {
-        return (`/img/${restaurant.photograph}.jpg`);
+    static imageUrlForRestaurant(restaurant, size = '') {
+        //return (`/img/${restaurant.photograph}.jpg`);
+        return (`/img/${restaurant.id}${size}.webp`); // changed to stop annoying 'File not found' error
     }
 
     /**
