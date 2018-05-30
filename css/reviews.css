@@ -28,7 +28,7 @@
 }
 
 .review-rating {
-    background-color: #fa0;
+    background-color: darkred;
     border-radius: 5px;
     height: 2em;
     line-height: 2em;
