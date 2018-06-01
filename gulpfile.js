@@ -15,7 +15,8 @@ var gulp = require('gulp'),
     imagemin = require('gulp-imagemin'),
     jimp = require('gulp-jimp-resize'),
     webp = require('gulp-webp'),
-    webserver = require('gulp-webserver');
+    webserver = require('gulp-webserver'),
+    uglify = require('gulp-uglify-es').default;
 
 
 gulp.task('default', function () {
@@ -42,10 +43,12 @@ gulp.task('scripts', function () {
     del([`${DEST_JS}/**`]);
 
     gulp.src([`${SOURCE_JS}/**/*.js`, `!${SOURCE_JS}/restaurant_info.js`])
+        .pipe(uglify())
         .pipe(concat('all_index.js'))
         .pipe(gulp.dest(DEST_JS));
 
     gulp.src([`${SOURCE_JS}/**/*.js`, `!${SOURCE_JS}/main.js`])
+        .pipe(uglify())
         .pipe(concat('all_restaurant.js'))
         .pipe(gulp.dest(DEST_JS));
 });
