@@ -13,14 +13,122 @@ class DBHelper {
     }
 
     /**
+     * Function to set up and return the database!
+     */
+    static get dB() {
+        // if it's already set, return it
+        if (DBHelper._dB) {
+            return Promise.resolve(DBHelper._dB);
+        }
+
+        // create and return the database!
+        return new Promise((resolve, reject) => {
+            const openRequest = indexedDB.open('restaurant-reviews', 1);
+
+            // send a rejection if there's an error
+            openRequest.onerror = () => reject();
+
+            // run the upgrade if needed
+            openRequest.onupgradeneeded = () => {
+                const db = openRequest.result,
+                    store = db.createObjectStore('restaurants', {
+                        keyPath: 'id'
+                    });
+
+                // set up some indexes - not sure if required
+                // but my knowledge of mysql is telling me to!
+                store.createIndex('id', 'id');
+                store.createIndex('cuisine', 'cuisine_type');
+                store.createIndex('neighborhood', 'neighborhood');
+            };
+
+            // open and resolve!
+            openRequest.onsuccess = (event) => {
+                DBHelper._dB = openRequest.result;
+                console.log('ok here');
+                resolve(DBHelper._dB);
+            };
+        });
+    }
+
+    /**
+     * Function to set the data in the database
+     */
+    static putRestaurantsInDb(restaurants) {
+        // get the db
+        return DBHelper.dB
+            .then((db) => {
+                // set transaction and object store
+                const transaction = db.transaction('restaurants', 'readwrite'),
+                    objStore = transaction.objectStore('restaurants');
+                // loop through restaurants
+                restaurants.forEach((restaurant) => {
+                    // and save them in teh database
+                    objStore.put({
+                        id: restaurant.id,
+                        restaurant: restaurant
+                    });
+                });
+            })
+            // catch any errors and kick them to the console
+            .catch(() => {
+                console.log(`Whoops! Couldn't set data: ${restaurants}`);
+            });
+    }
+
+    /**
+     * Function to pull data from the database
+     */
+    static getRestaurantsFromDb(id) {
+        // get the db
+        return DBHelper.dB
+            .then((db) => {
+                // set transaction and object store
+                const transaction = db.transaction('restaurants', 'readonly'),
+                    objStore = transaction.objectStore('restaurants');
+                // if there's an id
+                if (id) {
+                    // return the selected restaurant
+                    return objStore.getAll(id);
+                } else {
+                    // otherwise return them all
+                    return objStore.getAll();
+                }
+            })
+            // if there's an error, kick it to the console!
+            .catch(() => {
+                console.log(`Whoops! Couldn't return data for restaurant ${id}`);
+            });
+    }
+
+    /**
      * Fetch all restaurants.
      */
-    static fetchRestaurants(callback) {
+    static fetchRestaurants(callback, id = '') {
         // fetch all restaurants with proper error handling.
-        fetch(DBHelper.DATABASE_URL)
-            .then(response => response.json())
-            .then(restaurants => callback(null, restaurants))
-            .catch(error => callback(`Request failed: ${response}`, null));
+        let myCallback = callback;
+        // grab the restaurant(s) from teh database
+        DBHelper.getRestaurantsFromDb(id)
+            // if there's any there, throw them to the screen
+            .then((restaurants) => {
+                if (restaurants && restaurants.length > 0) {
+                    myCallback(null, restaurants);
+                    myCallback = () => {};
+                }
+            })
+            // then grab from the url
+            .then(() => fetch(`${DBHelper.DATABASE_URL}/${id}`))
+            // parse teh response
+            .then((response) => response.json())
+            // and insert/update the database
+            .then((restaurants) => {
+                DBHelper.putRestaurantsInDb(restaurants);
+                myCallback(null, restaurants);
+            })
+            // catch any errors and you know the drill. Log it!
+            .catch((error) => {
+                myCallback(`Whoops! ${error.message}`, null);
+            });
     }
 
     /**
@@ -28,10 +136,18 @@ class DBHelper {
      */
     static fetchRestaurantById(id, callback) {
         // fetch one restaurants with proper error handling.
-        fetch(`${DBHelper.DATABASE_URL}/${id}`)
-            .then(response => response.json())
-            .then(restaurant => callback(null, restaurant))
-            .catch(error => callback(`Restaurant does not exist`, null));
+        DBHelper.fetchRestaurants((error, restaurants) => {
+            if (error) {
+                callback(error, null);
+            } else {
+                const restaurant = restaurants.find(r => r.id == id);
+                if (restaurant) { // Got the restaurant
+                    callback(null, restaurant);
+                } else { // Restaurant does not exist in the database
+                    callback('Restaurant does not exist', null);
+                }
+            }
+        }, id);
     }
 
     /**
@@ -43,11 +159,14 @@ class DBHelper {
             if (error) {
                 callback(error, null);
             } else {
-                // Filter restaurants to have only given cuisine type
-                const results = restaurants.filter(r => r.cuisine_type == cuisine);
-                callback(null, results);
+                const restaurant = restaurants.find(r => r.id == id);
+                if (restaurant) { // Got the restaurant
+                    callback(null, restaurant);
+                } else { // Restaurant does not exist in the database
+                    callback('Restaurant does not exist', null);
+                }
             }
-        });
+        }, id);
     }
 
     /**

@@ -70,6 +70,7 @@ gulp.task('resize_images', function () {
         .pipe(gulp.dest(DEST_IMG));
 
 });
+
 /* save images as webp */
 gulp.task('webp_images', ['resize_images'], function () {
     del([`${DEST_IMG}/*.webp]`]);
@@ -94,7 +95,7 @@ gulp.task('cleanup', function () {
 gulp.task('serve', ['styles', 'scripts', 'images'], function() {
   gulp.src('./')
     .pipe(webserver({
-      port: 8010,
+      port: 8000,
     }));
 
 });
