@@ -1,20 +1,24 @@
 {
-  "short_name": "Restaurants",
-  "name": "New York Restaurant Reviews",
-  "icons": [
-    {
-      "src": "/icons/icons-192.png",
-      "type": "image/png",
-      "sizes": "192x192"
+    "short_name": "Restaurants",
+    "name": "New York Restaurant Reviews",
+    "icons": [
+        {
+            "src": "/icons/icons-192.png",
+            "type": "image/png",
+            "sizes": "192x192"
     },
-    {
-      "src": "/icons/icons-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+        {
+            "src": "/icons/icons-512.png",
+            "type": "image/png",
+            "sizes": "512x512"
     }
   ],
-  "start_url": "/?source=pwa",
-  "background_color": "white",
-  "display": "standalone",
-  "theme_color": "darkslateblue"
+    "start_url": "/?source=pwa",
+    "background_color": "white",
+    "display": "standalone",
+    "theme_color": "darkslateblue",
+    "scripts": {
+        "build": "gulp build",
+        "serve": "gulp serve"
+    }
 }

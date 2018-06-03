@@ -23,7 +23,7 @@ class DBHelper {
 
         // create and return the database!
         return new Promise((resolve, reject) => {
-            const openRequest = indexedDB.open('restaurant-reviews', 1);
+            const openRequest = indexedDB.open('restaurant-reviews', 2);
 
             // send a rejection if there's an error
             openRequest.onerror = () => reject();
@@ -45,7 +45,6 @@ class DBHelper {
             // open and resolve!
             openRequest.onsuccess = (event) => {
                 DBHelper._dB = openRequest.result;
-                console.log('ok here');
                 resolve(DBHelper._dB);
             };
         });
@@ -111,7 +110,9 @@ class DBHelper {
         DBHelper.getRestaurantsFromDb(id)
             // if there's any there, throw them to the screen
             .then((restaurants) => {
+                // check restaurants exist 
                 if (restaurants && restaurants.length > 0) {
+                    // and throw them back
                     myCallback(null, restaurants);
                     myCallback = () => {};
                 }
@@ -122,6 +123,9 @@ class DBHelper {
             .then((response) => response.json())
             // and insert/update the database
             .then((restaurants) => {
+                if (!Array.isArray(restaurants)) {
+                  restaurants = [restaurants];
+                }
                 DBHelper.putRestaurantsInDb(restaurants);
                 myCallback(null, restaurants);
             })
