@@ -124,7 +124,7 @@ class DBHelper {
             // and insert/update the database
             .then((restaurants) => {
                 if (!Array.isArray(restaurants)) {
-                  restaurants = [restaurants];
+                    restaurants = [restaurants];
                 }
                 DBHelper.putRestaurantsInDb(restaurants);
                 myCallback(null, restaurants);
