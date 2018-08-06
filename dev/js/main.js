@@ -35,7 +35,7 @@ fetchNeighborhoods = () => {
             fillNeighborhoodsHTML();
         }
     });
-}
+};
 
 /**
  * Set neighborhoods HTML.
@@ -48,7 +48,7 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
         option.value = neighborhood;
         select.append(option);
     });
-}
+};
 
 /**
  * Fetch all cuisines and set their HTML.
@@ -62,7 +62,7 @@ fetchCuisines = () => {
             fillCuisinesHTML();
         }
     });
-}
+};
 
 /**
  * Set cuisines HTML.
@@ -76,7 +76,7 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
         option.value = cuisine;
         select.append(option);
     });
-}
+};
 
 /**
  * Initialize Google map, called from HTML.
@@ -96,7 +96,7 @@ window.initMap = () => {
     // and just ignore the damn thing!
     // could log it, don't wanna!
     } catch (error) {}
-}
+};
 
 /**
  * Update page and map for current restaurants.
@@ -118,8 +118,8 @@ updateRestaurants = () => {
             resetRestaurants(restaurants);
             fillRestaurantsHTML();
         }
-    })
-}
+    });
+};
 
 /**
  * Clear current restaurants, their HTML and remove their map markers.
@@ -136,7 +136,7 @@ resetRestaurants = (restaurants) => {
     }
     self.markers = [];
     self.restaurants = restaurants;
-}
+};
 
 /**
  * Create all restaurants HTML and add them to the webpage.
@@ -147,7 +147,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
         ul.append(createRestaurantHTML(restaurant));
     });
     addMarkersToMap();
-}
+};
 
 /**
  * Create restaurant HTML.
@@ -182,10 +182,10 @@ createRestaurantHTML = (restaurant) => {
     more.className = 'list-restaurant-more';
     more.innerHTML = 'View Details';
     more.href = DBHelper.urlForRestaurant(restaurant);
-    li.append(more)
+    li.append(more);
 
-    return li
-}
+    return li;
+};
 
 /**
  * Add markers for current restaurants to the map.
@@ -195,8 +195,8 @@ addMarkersToMap = (restaurants = window.restaurants) => {
         // Add marker to the map
         const marker = DBHelper.mapMarkerForRestaurant(restaurant, window.map);
         google.maps.event.addListener(marker, 'click', () => {
-            window.location.href = marker.url
+            window.location.href = marker.url;
         });
         markers.push(marker);
     });
-}
+};

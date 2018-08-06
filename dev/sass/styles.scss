@@ -386,3 +386,25 @@ section {
 	clip: rect(1px 1px 1px 1px);
 	clip: rect(1px, 1px, 1px, 1px);
 }
+
+#restaurant-isFavorite-container {
+	margin: -15px 0 20px;
+	padding: 4px 0;
+	text-align: center;
+	text-transform: uppercase;
+	width: 90%;
+    color: $color_9;
+}
+#restaurant-isFavorite-container.isFave {
+    background-color: $background_color_10;
+}
+#restaurant-isFavorite-container.isFave:hover {
+    background-color: $background_color_13;
+}
+#restaurant-isFavorite-container.notFave {
+    background-color: $background_color_11;
+}
+#restaurant-isFavorite-container.notFave:hover {
+    background-color: $background_color_6;
+    color: $color_1;
+}

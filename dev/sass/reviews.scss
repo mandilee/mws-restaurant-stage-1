@@ -53,3 +53,10 @@ $background_color_2: #fff;
 		position: relative;
 	}
 }
+#review_form {
+    display: grid;
+    grid-row-gap: .5em;
+}
+#review_form label {
+    font-weight: bold;
+}

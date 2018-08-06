@@ -8,8 +8,17 @@ class DBHelper {
      * Change this to restaurants.json file location on your server.
      */
     static get DATABASE_URL() {
-        const port = 1337 // Change this to your server port
-        return `http://localhost:${port}/restaurants`;
+        const port = 1337; // Change this to your server port
+        return `http://localhost:${port}/`;
+    }
+    static get RESTAURANTS_STORE() {
+        return 'restaurants';
+    }
+    static get REVIEWS_STORE() {
+        return 'reviews';
+    }
+    static get PENDING_REVIEWS() {
+        return 'pending';
     }
 
     /**
@@ -31,15 +40,23 @@ class DBHelper {
             // run the upgrade if needed
             openRequest.onupgradeneeded = () => {
                 const db = openRequest.result,
-                    store = db.createObjectStore('restaurants', {
+                    restaurantStore = db.createObjectStore(DBHelper.RESTAURANTS_STORE, {
                         keyPath: 'id'
+                    }),
+                    reviewStore = db.createObjectStore(DBHelper.REVIEWS_STORE, {
+                        keyPath: 'id'
+                    }),
+                    pendingReviews = db.createObjectStore(DBHelper.PENDING_REVIEWS, {
+                        autoIncrement: true
                     });
 
                 // set up some indexes - not sure if required
                 // but my knowledge of mysql is telling me to!
-                store.createIndex('id', 'id');
-                store.createIndex('cuisine', 'cuisine_type');
-                store.createIndex('neighborhood', 'neighborhood');
+                restaurantStore.createIndex('id', 'id');
+                restaurantStore.createIndex('cuisine', 'cuisine_type');
+                restaurantStore.createIndex('neighborhood', 'neighborhood');
+                reviewStore.createIndex('restaurant_id', 'restaurant_id');
+                pendingReviews.createIndex('restaurant_id', 'restaurant_id');
             };
 
             // open and resolve!
@@ -53,38 +70,35 @@ class DBHelper {
     /**
      * Function to set the data in the database
      */
-    static putRestaurantsInDb(restaurants) {
+    static putDataInDb(store, allData) {
         // get the db
         return DBHelper.dB
             .then((db) => {
                 // set transaction and object store
-                const transaction = db.transaction('restaurants', 'readwrite'),
-                    objStore = transaction.objectStore('restaurants');
+                const transaction = db.transaction(store, 'readwrite'),
+                    objStore = transaction.objectStore(store);
                 // loop through restaurants
-                restaurants.forEach((restaurant) => {
+                allData.forEach(data => {
                     // and save them in teh database
-                    objStore.put({
-                        id: restaurant.id,
-                        restaurant: restaurant
-                    });
+                    objStore.put(data);
                 });
             })
             // catch any errors and kick them to the console
-            .catch(() => {
-                console.log(`Whoops! Couldn't set data: ${restaurants}`);
+            .catch(error => {
+                console.log(`Whoops! Couldn't set data: ${store} ${allData}`, error.message);
             });
     }
 
     /**
-     * Function to pull data from the database
+     * Function to pull restaurant data from the database
      */
     static getRestaurantsFromDb(id) {
         // get the db
         return DBHelper.dB
             .then((db) => {
                 // set transaction and object store
-                const transaction = db.transaction('restaurants', 'readonly'),
-                    objStore = transaction.objectStore('restaurants');
+                const transaction = db.transaction(DBHelper.RESTAURANTS_STORE, 'readonly'),
+                    objStore = transaction.objectStore(DBHelper.RESTAURANTS_STORE);
                 // if there's an id
                 if (id) {
                     // return the selected restaurant
@@ -94,9 +108,45 @@ class DBHelper {
                     return objStore.getAll();
                 }
             })
+            .then(query => new Promise(resolve => {
+                query.onsuccess = () => resolve(query.result);
+            }))
             // if there's an error, kick it to the console!
             .catch(() => {
                 console.log(`Whoops! Couldn't return data for restaurant ${id}`);
+                return undefined;
+            });
+    }
+
+    /**
+     * Function to pull review data from the database
+     */
+    static getReviewsFromDb(id) {
+        // get the db
+        return DBHelper.dB
+            .then((db) => {
+                // set transaction and object store
+                const reviewTransaction = db.transaction(DBHelper.REVIEWS_STORE, 'readonly'),
+                    reviewObjStore = reviewTransaction.objectStore(DBHelper.REVIEWS_STORE),
+                    reviewIndex = reviewObjStore.index('restaurant_id'),
+                    pendingTransaction = db.transaction(DBHelper.PENDING_REVIEWS, 'readonly'),
+                    pendingObjStore = pendingTransaction.objectStore(DBHelper.PENDING_REVIEWS),
+                    pendingIndex = pendingObjStore.index('restaurant_id');
+
+                return Promise.all(
+                [reviewIndex, pendingIndex].map(index => new Promise((resolve) => {
+
+                        const query = id ? index.getAll(id) : index.getAll();
+                        query.onsuccess = () => resolve(query.result);
+                    }))
+                );
+
+
+            })
+            .then(([reviewResult, pendingResult]) => [...reviewResult, ...pendingResult])
+            // if there's an error, kick it to the console!
+            .catch(error => {
+                console.log(`Whoops! Couldn't return reviews for restaurant ${id}`, error.message);
             });
     }
 
@@ -118,7 +168,7 @@ class DBHelper {
                 }
             })
             // then grab from the url
-            .then(() => fetch(`${DBHelper.DATABASE_URL}/${id}`))
+            .then(() => fetch(`${DBHelper.DATABASE_URL}restaurants/${id}`))
             // parse teh response
             .then((response) => response.json())
             // and insert/update the database
@@ -126,12 +176,39 @@ class DBHelper {
                 if (!Array.isArray(restaurants)) {
                     restaurants = [restaurants];
                 }
-                DBHelper.putRestaurantsInDb(restaurants);
+                DBHelper.putDataInDb(DBHelper.RESTAURANTS_STORE, restaurants);
                 myCallback(null, restaurants);
             })
             // catch any errors and you know the drill. Log it!
             .catch((error) => {
                 myCallback(`Whoops! ${error.message}`, null);
+            });
+    }
+
+    /**
+     * Fetch all reviews.
+     */
+    static fetchReviews(callback, id) {
+        let myCallback = callback;
+        DBHelper.getReviewsFromDb(id)
+            .then((reviews) => {
+                if (reviews && reviews.length > 0) {
+                    myCallback(reviews);
+                    myCallback = () => {};
+                }
+            })
+            .then(() => fetch(`${DBHelper.DATABASE_URL}reviews/?restaurant_id=${id}`))
+            .then((response) => response.json())
+            .then((reviews) => {
+                if (!Array.isArray(reviews)) {
+                    reviews = [reviews];
+                }
+                DBHelper.putDataInDb(DBHelper.REVIEWS_STORE, reviews);
+                myCallback(reviews);
+            })
+            .catch((error) => { // Oops!. Got an error from server or with the response
+                console.error(`Request failed. ${error.message}`);
+                myCallback([]);
             });
     }
 
@@ -198,7 +275,7 @@ class DBHelper {
             if (error) {
                 callback(error, null);
             } else {
-                let results = restaurants
+                let results = restaurants;
                 if (cuisine != 'all') { // filter by cuisine
                     results = results.filter(r => r.cuisine_type == cuisine);
                 }
@@ -220,9 +297,9 @@ class DBHelper {
                 callback(error, null);
             } else {
                 // Get all neighborhoods from all restaurants
-                const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood)
+                const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood);
                 // Remove duplicates from neighborhoods
-                const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) == i)
+                const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) == i);
                 callback(null, uniqueNeighborhoods);
             }
         });
@@ -238,9 +315,9 @@ class DBHelper {
                 callback(error, null);
             } else {
                 // Get all cuisines from all restaurants
-                const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type)
+                const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type);
                 // Remove duplicates from cuisines
-                const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) == i)
+                const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) == i);
                 callback(null, uniqueCuisines);
             }
         });
@@ -275,4 +352,63 @@ class DBHelper {
         return marker;
     }
 
+    // mark restaurant as favorite
+    static setRestaurantAsFavorite(id, isFavorite) {
+        let is_fave = isFavorite ? 'true' : false;
+        fetch(`${DBHelper.DATABASE_URL}restaurants/${id}/?is_favorite=${is_fave}`, {
+                method: 'PUT'
+            })
+            .then((response) => response.json())
+            .then((restaurant) => {
+                DBHelper.putDataInDb(DBHelper.RESTAURANTS_STORE, [restaurant]);
+            })
+            .catch(error => {
+                console.error(`Couldn't change favorite restaurant: ${error.message}`);
+            });
+    }
+
+    // add the review to the 'pending' table
+    static addReviewToPending(review) {
+        return DBHelper.putDataInDb(DBHelper.PENDING_REVIEWS, [review]);
+    }
+
+    // push any pending reviews to the server
+    static sendReview(data, callback) {
+        // https:/developers.google.com/web/updates/2015/12/background-sync
+        return DBHelper.addReviewToPending(data)
+            .then(() => navigator.serviceWorker.ready)
+            .then(reg => reg.sync.register('send-reviews'))
+            .catch(error => {
+                DBHelper.emptyPending();
+                DBHelper.updateServerReviews([data])
+                    .then(() => callback());
+            })
+            .catch(error => console.error(error.message));
+    }
+
+    // Push pending reviews to server
+    static updateServerReviews(data) {
+        return fetch(`${DBHelper.DATABASE_URL}reviews/`, {
+                method: 'post',
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(review => {
+                DBHelper.putDataInDb(DBHelper.REVIEWS_STORE, [review]);
+            });
+    }
+
+    // Remove pending reviews
+    static emptyPending() {
+        return DBHelper.dB
+            .then(db => {
+                const transaction = db.transaction(DBHelper.PENDING_REVIEWS, 'readwrite'),
+                    store = transaction.objectStore(DBHelper.PENDING_REVIEWS);
+                return store.clear();
+            })
+            .then(query => new Promise(resolve => {
+                query.onsuccess = () => resolve();
+            }))
+            .catch(error => console.warn(`Couldn't clear pending reviews: ${error.message}`));
+    }
 }
